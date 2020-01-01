@@ -10,15 +10,25 @@ public class CharController : MonoBehaviour
     private Rigidbody rb;
     private bool walkingRight = true;
     private Animator anim;
+    private GameManager gameManager;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     private void FixedUpdate()
     {
+        if(!gameManager.gameStarted)
+        {
+            return;
+        }
+        else
+        {
+            anim.SetTrigger("gameStarted");
+        }
         rb.transform.position = transform.position + transform.forward * 2 * Time.deltaTime;
     }
 

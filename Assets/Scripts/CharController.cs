@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharController : MonoBehaviour {
+public class CharController : MonoBehaviour
+{
+
+    public Transform rayStart;
 
     private Rigidbody rb;
     private bool walkingRight = true;
+    private Animator anim;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
@@ -19,17 +24,23 @@ public class CharController : MonoBehaviour {
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Switch();
         }
+
+        RaycastHit hit;
+        if (!Physics.Raycast(rayStart.position, -transform.up, out hit, Mathf.Infinity))
+        {
+            anim.SetTrigger("isFalling");
+        }
     }
 
-    private void Switch() 
+    private void Switch()
     {
         walkingRight = !walkingRight;
 
-        if(walkingRight)
+        if (walkingRight)
         {
             transform.rotation = Quaternion.Euler(0, 45, 0);
         }
